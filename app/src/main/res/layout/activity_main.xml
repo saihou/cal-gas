@@ -13,20 +13,25 @@
             android:layout_height="wrap_content"
             android:text="Estimated quantity:"
             android:textSize="20sp"
-            android:layout_toStartOf="@+id/gallons_text" />
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/gallons_text"
+            android:id="@+id/textView" />
 
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/gallons_text"
             android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:maxLength="2"
+            android:numeric="integer" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/gallons_label"
             android:textSize="20sp"
-            android:layout_alignParentTop="true"
+            android:layout_centerVertical="true"
+            android:layout_alignTop="@+id/textView"
             android:layout_toEndOf="@+id/gallons_text" />
     </RelativeLayout>
 
@@ -44,7 +49,7 @@
 
             <fragment xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
-                android:id="@+id/fragment"
+                android:id="@+id/fragmentA"
                 android:name="com.saihou.calgas.MainActivityFragment"
                 tools:layout="@layout/fragment_main"
                 android:layout_width="match_parent"
@@ -59,7 +64,7 @@
             <fragment
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/fragment2"
+                android:id="@+id/fragmentB"
                 android:name="com.saihou.calgas.MainActivityFragment"
                 tools:layout="@layout/fragment_main" />
 

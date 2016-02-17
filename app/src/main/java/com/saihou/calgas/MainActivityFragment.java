@@ -1,12 +1,14 @@
 package com.saihou.calgas;
 
 import android.app.Fragment;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.NumberPicker;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -14,6 +16,10 @@ import android.widget.TextView;
  * A placeholder fragment containing a simple view.
  */
 public class MainActivityFragment extends Fragment implements NumberPicker.OnValueChangeListener, Spinner.OnItemSelectedListener{
+
+    TextView title;
+    RelativeLayout parentView;
+    String fragmentName;
 
     NumberPicker aPriceDollars;
     NumberPicker aPriceCents1;
@@ -26,18 +32,7 @@ public class MainActivityFragment extends Fragment implements NumberPicker.OnVal
     Spinner aCashbackSpinner;
 
     TextView aTotalCost;
-
-    NumberPicker bPriceDollars;
-    NumberPicker bPriceCents1;
-    NumberPicker bPriceCents2;
-
-    NumberPicker bFeesDollars;
-    NumberPicker bFeesCents1;
-    NumberPicker bFeesCents2;
-
-    Spinner bCashbackSpinner;
-
-    TextView bTotalCost;
+    float fTotalCost;
 
     public MainActivityFragment() {
     }
@@ -46,6 +41,13 @@ public class MainActivityFragment extends Fragment implements NumberPicker.OnVal
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
+
+        fragmentName = (getId() == R.id.fragmentA) ? "A" : "B";
+
+        title = (TextView) view.findViewById(R.id.gas_station_label);
+        title.setText((fragmentName.equals("A")) ? R.string.station_a : R.string.station_b);
+
+        parentView = (RelativeLayout) view.findViewById(R.id.relativeLayout);
 
         aPriceDollars = (NumberPicker) view.findViewById(R.id.board_price_a_dollars);
         aPriceCents1 = (NumberPicker) view.findViewById(R.id.board_price_a_cents_1);
@@ -82,9 +84,15 @@ public class MainActivityFragment extends Fragment implements NumberPicker.OnVal
         aFeesCents2.setMinValue(0);
 
         //default
-        aFeesDollars.setValue(0);
-        aFeesCents1.setValue(3);
-        aFeesCents2.setValue(5);
+        if (fragmentName.equals("A")) {
+            aFeesDollars.setValue(0);
+            aFeesCents1.setValue(3);
+            aFeesCents2.setValue(5);
+        } else {
+            aFeesDollars.setValue(0);
+            aFeesCents1.setValue(0);
+            aFeesCents2.setValue(0);
+        }
 
         //listeners
         aFeesDollars.setOnValueChangedListener(this);
@@ -95,23 +103,26 @@ public class MainActivityFragment extends Fragment implements NumberPicker.OnVal
         aCashbackSpinner.setOnItemSelectedListener(this);
 
         aTotalCost = (TextView) view.findViewById(R.id.total_cost);
-
         return view;
     }
 
     public void calculate() {
+        MainActivity activity = (MainActivity) getActivity();
+
         String rawPrice = String.valueOf(aPriceDollars.getValue()) + "." + String.valueOf(aPriceCents1.getValue()) + String.valueOf(aPriceCents2.getValue());
         String rawFees = String.valueOf(aFeesDollars.getValue()) + "." + String.valueOf(aFeesCents1.getValue()) + String.valueOf(aFeesCents2.getValue());
 
         float price = Float.parseFloat(rawPrice);
         float fees = Float.parseFloat(rawFees);
         float cashback_percent = Float.parseFloat(aCashbackSpinner.getSelectedItem().toString().substring(0,1));
-        float gallons = 10;
+        float gallons = activity.getEstimatedGallons();
 
         float cost = price * gallons + fees;
         float cashback = cashback_percent * cost / 100.0f;
-        float totalCost = (cost - cashback);
-        aTotalCost.setText(String.format("%.2f", totalCost));
+        fTotalCost = (cost - cashback);
+        aTotalCost.setText(String.format("%.2f", fTotalCost));
+
+        activity.calculate();
     }
 
     @Override
@@ -124,6 +135,17 @@ public class MainActivityFragment extends Fragment implements NumberPicker.OnVal
         calculate();
     }
 
+    public float getTotalCost() {
+        return fTotalCost;
+    }
+
+    public void setBackgroundColor() {
+        parentView.setBackgroundResource(R.color.pastelGreen);
+    }
+
+    public void resetBackgroundColor() {
+        parentView.setBackgroundColor(Color.TRANSPARENT);
+    }
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
         calculate();

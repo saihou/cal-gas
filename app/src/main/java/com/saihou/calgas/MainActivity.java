@@ -1,18 +1,53 @@
 package com.saihou.calgas;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.RelativeLayout;
 
 public class MainActivity extends Activity {
+
+    MainActivityFragment fragmentA;
+    MainActivityFragment fragmentB;
+    EditText gallonsText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        fragmentA = (MainActivityFragment) getFragmentManager().findFragmentById(R.id.fragmentA);
+        fragmentB = (MainActivityFragment) getFragmentManager().findFragmentById(R.id.fragmentB);
+        gallonsText = (EditText) findViewById(R.id.gallons_text);
+        gallonsText.setText("15");
+        gallonsText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                invokeFragmentsCalculate();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
+    private void invokeFragmentsCalculate() {
+        fragmentA.calculate();
+        fragmentB.calculate();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -34,5 +69,17 @@ public class MainActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public float getEstimatedGallons() {
+        return Float.parseFloat(gallonsText.getText().toString());
+    }
+
+    public void calculate() {
+        fragmentA.resetBackgroundColor();
+        fragmentB.resetBackgroundColor();
+
+        MainActivityFragment fragment = (fragmentA.getTotalCost() > fragmentB.getTotalCost()) ? fragmentB : fragmentA;
+        fragment.setBackgroundColor();
     }
 }
