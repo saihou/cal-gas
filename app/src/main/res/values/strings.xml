@@ -2,4 +2,20 @@
     <string name="app_name">CalGas</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="board_price">Board price</string>
+    <string name="extra_fees">Extra fees</string>
+    <string name="cashback">Cashback</string>
+    <string name="total_cost">Total Cost</string>
+    <string name="station_a">Gas Station A</string>
+    <string name="station_b">Gas Station B</string>
+    <string name="gallons_label">Gallons</string>
+
+    <string-array name="cashback_array">
+        <item>0%</item>
+        <item>1%</item>
+        <item>2%</item>
+        <item>3%</item>
+        <item>4%</item>
+        <item>5%</item>
+    </string-array>
 </resources>
