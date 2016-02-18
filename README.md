@@ -11,4 +11,4 @@ Exxon board price: 2.32/gallon.
 
 Let’s say your car has a gas tank of 15 gallons. If you pump Arco with debit card, the total cost would be 2.19x15 + 0.35 = __$33.20__. If you pump Exxon with a credit card that gives you 5% cashback on gas, your total cost would be 2.32x15x0.95 = __$33.06__.
 
-***Android app still in development. Stay tuned!***
+![](http://i.imgur.com/i6tfkux.png?1)
