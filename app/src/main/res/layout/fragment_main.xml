@@ -59,7 +59,8 @@
                     android:layout_alignParentEnd="true"
                     android:layout_toEndOf="@+id/board_price_a_cents_2"
                     android:src="@drawable/ic_create_black_24dp"
-                    android:id="@+id/board_price_a_btn" />
+                    android:id="@+id/board_price_a_btn"
+                    android:visibility="gone"/>
             </RelativeLayout>
 
             <TextView
@@ -98,7 +99,8 @@
                     android:layout_alignParentEnd="true"
                     android:layout_toEndOf="@+id/extra_fees_a_cents_2"
                     android:src="@drawable/ic_create_black_24dp"
-                    android:id="@+id/extra_fees_a_btn"/>
+                    android:id="@+id/extra_fees_a_btn"
+                    android:visibility="gone"/>
             </RelativeLayout>
 
             <TextView

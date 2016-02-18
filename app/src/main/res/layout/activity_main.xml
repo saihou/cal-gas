@@ -11,8 +11,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Estimated quantity:"
-            android:textSize="20sp"
+            android:text="Estimated:"
+            android:textStyle="italic"
+            android:textSize="25sp"
             android:layout_centerVertical="true"
             android:layout_toStartOf="@+id/gallons_text"
             android:id="@+id/textView" />
@@ -24,12 +25,15 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:maxLength="2"
+            android:textStyle="bold"
+            android:textSize="25sp"
             android:numeric="integer" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/gallons_label"
-            android:textSize="20sp"
+            android:textSize="25sp"
+            android:textStyle="italic"
             android:layout_centerVertical="true"
             android:layout_alignTop="@+id/textView"
             android:layout_toEndOf="@+id/gallons_text" />

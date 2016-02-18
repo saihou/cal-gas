@@ -2,12 +2,14 @@ package com.saihou.calgas;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
@@ -34,6 +36,12 @@ public class MainActivity extends Activity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() == 2) {
+                    // hide virtual keyboard
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(gallonsText.getWindowToken(), 0);
+                    gallonsText.clearFocus();
+                }
                 invokeFragmentsCalculate();
             }
 
@@ -64,15 +72,15 @@ public class MainActivity extends Activity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
 
         return super.onOptionsItemSelected(item);
     }
 
     public float getEstimatedGallons() {
-        return Float.parseFloat(gallonsText.getText().toString());
+        return ((gallonsText.getText().length() > 0) ? (Float.parseFloat(gallonsText.getText().toString())) : 0.0f);
     }
 
     public void calculate() {
