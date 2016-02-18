@@ -120,7 +120,7 @@ public class MainActivityFragment extends Fragment implements NumberPicker.OnVal
         float cost = price * gallons + fees;
         float cashback = cashback_percent * cost / 100.0f;
         fTotalCost = (cost - cashback);
-        aTotalCost.setText(String.format("%.2f", fTotalCost));
+        aTotalCost.setText(String.format("$%.2f", fTotalCost));
 
         activity.calculate();
     }
