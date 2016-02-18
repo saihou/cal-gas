@@ -13,7 +13,8 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:id="@+id/linearLayout">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -121,35 +122,33 @@
                     android:id="@+id/cashback_spinner"
                     android:entries="@array/cashback_array"/>
             </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textAllCaps="true"
-                    android:textSize="25sp"
-                    android:text="@string/total_cost"
-                    android:layout_gravity="center"
-                    android:layout_above="@+id/total_cost"
-                    android:layout_centerHorizontal="true" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textAllCaps="true"
-                    android:textSize="25sp"
-                    android:layout_gravity="center"
-                    android:textAlignment="center"
-                    android:text="$32.20"
-                    android:id="@+id/total_cost"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true" />
-            </RelativeLayout>
         </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textAllCaps="true"
+            android:textSize="25sp"
+            android:text="@string/total_cost"
+            android:layout_gravity="center"
+            android:layout_below="@id/linearLayout"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/label_cost"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textAllCaps="true"
+            android:textSize="25sp"
+            android:layout_gravity="center"
+            android:textAlignment="center"
+            android:text="$32.20"
+            android:id="@+id/total_cost"
+            android:layout_below="@+id/label_cost"
+            android:layout_centerHorizontal="true" />
     </RelativeLayout>
 </ScrollView>
+
 
