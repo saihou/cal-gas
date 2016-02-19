@@ -35,39 +35,27 @@
 
             <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                <NumberPicker
-                    android:layout_width="50dp"
-                    android:layout_height="150dp"
-                    android:id="@+id/board_price_a_dollars"></NumberPicker>
-                <View
-                    android:layout_width="15dp"
-                    android:layout_height="150dp"
-                    android:layout_toEndOf="@+id/board_price_a_dollars"
-                    android:id="@+id/board_price_a_spacing"/>
-                <NumberPicker
-                    android:layout_width="30dp"
-                    android:layout_height="150dp"
-                    android:layout_toEndOf="@+id/board_price_a_spacing"
-                    android:id="@+id/board_price_a_cents_1">
-                </NumberPicker>
-                <NumberPicker
-                    android:layout_width="30dp"
-                    android:layout_height="150dp"
-                    android:layout_toEndOf="@+id/board_price_a_cents_1"
-                    android:id="@+id/board_price_a_cents_2">
-                </NumberPicker>
-                <ImageButton
-                    android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:padding="5dp">
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="$"
+                    android:id="@+id/board_price_dollar_sign"
+                    android:textSize="30sp"
                     android:layout_centerVertical="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_toEndOf="@+id/board_price_a_cents_2"
-                    android:src="@drawable/ic_create_black_24dp"
-                    android:id="@+id/board_price_a_btn"
-                    android:visibility="gone"/>
+                    android:layout_alignParentStart="true"
+                    android:padding="10dp"/>
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="0.00"
+                    android:textSize="30sp"
+                    android:layout_toEndOf="@+id/board_price_dollar_sign"
+                    android:id="@+id/board_price_text"
+                    android:inputType="numberDecimal"
+                    android:maxLength="4"/>
             </RelativeLayout>
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -75,37 +63,26 @@
                 android:text="@string/extra_fees" />
             <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                <NumberPicker
-                    android:layout_width="50dp"
-                    android:layout_height="150dp"
-                    android:id="@+id/extra_fees_a_dollars"></NumberPicker>
-                <View
-                    android:layout_width="15dp"
-                    android:layout_height="150dp"
-                    android:layout_toEndOf="@+id/extra_fees_a_dollars"
-                    android:id="@+id/extra_fees_a_spacing"/>
-                <NumberPicker
-                    android:layout_width="30dp"
-                    android:layout_height="150dp"
-                    android:layout_toEndOf="@+id/extra_fees_a_spacing"
-                    android:id="@+id/extra_fees_a_cents_1">
-                </NumberPicker>
-                <NumberPicker
-                    android:layout_width="30dp"
-                    android:layout_height="150dp"
-                    android:layout_toEndOf="@+id/extra_fees_a_cents_1"
-                    android:id="@+id/extra_fees_a_cents_2">
-                </NumberPicker>
-                <ImageButton
-                    android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:padding="5dp">
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="$"
+                    android:id="@+id/extra_fees_dollar_sign"
+                    android:textSize="30sp"
                     android:layout_centerVertical="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_toEndOf="@+id/extra_fees_a_cents_2"
-                    android:src="@drawable/ic_create_black_24dp"
-                    android:id="@+id/extra_fees_a_btn"
-                    android:visibility="gone"/>
+                    android:layout_alignParentStart="true"
+                    android:padding="10dp"/>
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="0.00"
+                    android:textSize="30sp"
+                    android:layout_toEndOf="@+id/extra_fees_dollar_sign"
+                    android:id="@+id/extra_fees_text"
+                    android:inputType="numberDecimal"
+                    android:maxLength="4"/>
             </RelativeLayout>
 
             <TextView

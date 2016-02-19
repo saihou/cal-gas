@@ -1,13 +1,17 @@
 package com.saihou.calgas;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.NumberPicker;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -15,24 +19,19 @@ import android.widget.TextView;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment implements NumberPicker.OnValueChangeListener, Spinner.OnItemSelectedListener{
+public class MainActivityFragment extends Fragment implements Spinner.OnItemSelectedListener {
 
-    TextView title;
+    TextView titleText;
     RelativeLayout parentView;
     String fragmentName;
 
-    NumberPicker aPriceDollars;
-    NumberPicker aPriceCents1;
-    NumberPicker aPriceCents2;
+    EditText boardPriceText;
+    EditText extraFeesText;
 
-    NumberPicker aFeesDollars;
-    NumberPicker aFeesCents1;
-    NumberPicker aFeesCents2;
+    Spinner cashbackSpinner;
 
-    Spinner aCashbackSpinner;
-
-    TextView aTotalCost;
-    float fTotalCost;
+    TextView totalCostText;
+    float totalCost;
 
     public MainActivityFragment() {
     }
@@ -43,100 +42,59 @@ public class MainActivityFragment extends Fragment implements NumberPicker.OnVal
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
         fragmentName = (getId() == R.id.fragmentA) ? "A" : "B";
-
-        title = (TextView) view.findViewById(R.id.gas_station_label);
-        title.setText((fragmentName.equals("A")) ? R.string.station_a : R.string.station_b);
-
         parentView = (RelativeLayout) view.findViewById(R.id.relativeLayout);
 
-        aPriceDollars = (NumberPicker) view.findViewById(R.id.board_price_a_dollars);
-        aPriceCents1 = (NumberPicker) view.findViewById(R.id.board_price_a_cents_1);
-        aPriceCents2 = (NumberPicker) view.findViewById(R.id.board_price_a_cents_2);
+        titleText = (TextView) view.findViewById(R.id.gas_station_label);
+        titleText.setText((fragmentName.equals("A")) ? R.string.station_a : R.string.station_b);
 
-        //set range
-        aPriceDollars.setMaxValue(5);
-        aPriceDollars.setMinValue(1);
-        aPriceCents1.setMaxValue(9);
-        aPriceCents1.setMinValue(0);
-        aPriceCents2.setMaxValue(9);
-        aPriceCents2.setMinValue(0);
+        boardPriceText = (EditText) view.findViewById(R.id.board_price_text);
+        boardPriceText.setText(fragmentName.equals("A") ? "2.19" : "2.32");
+        boardPriceText.addTextChangedListener(new CustomTextWatcher(boardPriceText));
 
-        //default
-        aPriceDollars.setValue(2);
-        aPriceCents1.setValue(1);
-        aPriceCents2.setValue(9);
+        extraFeesText = (EditText) view.findViewById(R.id.extra_fees_text);
+        extraFeesText.setText(fragmentName.equals("A") ? "0.35" : "0.00");
+        extraFeesText.addTextChangedListener(new CustomTextWatcher(extraFeesText));
 
-        //listeners
-        aPriceDollars.setOnValueChangedListener(this);
-        aPriceCents1.setOnValueChangedListener(this);
-        aPriceCents2.setOnValueChangedListener(this);
+        cashbackSpinner = (Spinner) view.findViewById(R.id.cashback_spinner);
+        cashbackSpinner.setSelection(fragmentName.equals("A") ? 0 : 5);
+        cashbackSpinner.setOnItemSelectedListener(this);
 
-        aFeesDollars = (NumberPicker) view.findViewById(R.id.extra_fees_a_dollars);
-        aFeesCents1 = (NumberPicker) view.findViewById(R.id.extra_fees_a_cents_1);
-        aFeesCents2 = (NumberPicker) view.findViewById(R.id.extra_fees_a_cents_2);
+        totalCostText = (TextView) view.findViewById(R.id.total_cost);
 
-        //set range
-        aFeesDollars.setMaxValue(2);
-        aFeesDollars.setMinValue(0);
-        aFeesCents1.setMaxValue(9);
-        aFeesCents1.setMinValue(0);
-        aFeesCents2.setMaxValue(9);
-        aFeesCents2.setMinValue(0);
-
-        //default
-        if (fragmentName.equals("A")) {
-            aFeesDollars.setValue(0);
-            aFeesCents1.setValue(3);
-            aFeesCents2.setValue(5);
-        } else {
-            aFeesDollars.setValue(0);
-            aFeesCents1.setValue(0);
-            aFeesCents2.setValue(0);
-        }
-
-        //listeners
-        aFeesDollars.setOnValueChangedListener(this);
-        aFeesCents1.setOnValueChangedListener(this);
-        aFeesCents2.setOnValueChangedListener(this);
-
-        aCashbackSpinner = (Spinner) view.findViewById(R.id.cashback_spinner);
-        aCashbackSpinner.setOnItemSelectedListener(this);
-
-        aTotalCost = (TextView) view.findViewById(R.id.total_cost);
         return view;
     }
 
     public void calculate() {
         MainActivity activity = (MainActivity) getActivity();
 
-        String rawPrice = String.valueOf(aPriceDollars.getValue()) + "." + String.valueOf(aPriceCents1.getValue()) + String.valueOf(aPriceCents2.getValue());
-        String rawFees = String.valueOf(aFeesDollars.getValue()) + "." + String.valueOf(aFeesCents1.getValue()) + String.valueOf(aFeesCents2.getValue());
+        String rawPrice = boardPriceText.getText().toString().trim();
+        String rawFees = extraFeesText.getText().toString().trim();
 
-        float price = Float.parseFloat(rawPrice);
-        float fees = Float.parseFloat(rawFees);
-        float cashback_percent = Float.parseFloat(aCashbackSpinner.getSelectedItem().toString().substring(0,1));
+        float price = convertToFloat(rawPrice);
+        float fees = convertToFloat(rawFees);
+        float cashback_percent = Float.parseFloat(cashbackSpinner.getSelectedItem().toString().substring(0, 1));
         float gallons = activity.getEstimatedGallons();
 
         float cost = price * gallons + fees;
         float cashback = cashback_percent * cost / 100.0f;
-        fTotalCost = (cost - cashback);
-        aTotalCost.setText(String.format("$%.2f", fTotalCost));
+        totalCost = (cost - cashback);
+        totalCostText.setText(String.format("$%.2f", totalCost));
 
         activity.calculate();
     }
 
-    @Override
-    public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-        calculate();
-    }
+    private float convertToFloat(String rawPrice) {
+        try {
+            float price = Float.parseFloat(rawPrice);
 
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        calculate();
+            return price;
+        } catch (NumberFormatException e) {
+            return 0.00f;
+        }
     }
 
     public float getTotalCost() {
-        return fTotalCost;
+        return totalCost;
     }
 
     public void setBackgroundColor() {
@@ -146,8 +104,53 @@ public class MainActivityFragment extends Fragment implements NumberPicker.OnVal
     public void resetBackgroundColor() {
         parentView.setBackgroundColor(Color.TRANSPARENT);
     }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        calculate();
+    }
+
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
         calculate();
+    }
+
+    public class CustomTextWatcher implements TextWatcher {
+
+        EditText editText;
+        String before;
+
+        public CustomTextWatcher(EditText editText) {
+            this.editText = editText;
+            before = "";
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            before = s.toString();
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+//            if (s.length() == 4) {
+//                // hide virtual keyboard
+//                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+//                imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+//                editText.clearFocus();
+//            }
+            int index = s.toString().indexOf(".");
+            if (index != -1) {
+                String afterDecimal = s.toString().substring(index+1);
+                if (afterDecimal.length() > 2) {
+                    editText.setText(before);
+                }
+            }
+
+            calculate();
+        }
     }
 }

@@ -6,9 +6,10 @@ Imagine yourself at 2 gas stations, ARCO and Exxon, side by side. On the boards,
 
 Don’t believe me? Here’s a simple example for you. 
 
-ARCO board price: 2.19/gallon. 
+ARCO board price: 2.19/gallon.
+ 
 Exxon board price: 2.32/gallon. 
 
 Let’s say your car has a gas tank of 15 gallons. If you pump ARCO with debit card, the total cost would be 2.19x15 + 0.35 = __$33.20__. If you pump Exxon with a credit card that gives you 5% cashback on gas, your total cost would be 2.32x15x0.95 = __$33.06__.
 
-![](http://i.imgur.com/i6tfkux.png?1)
+![](http://i.imgur.com/qGLcOQ8.png)
