@@ -3,6 +3,7 @@ package com.saihou.calgas;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
@@ -18,6 +19,8 @@ public class MainActivity extends Activity {
     MainActivityFragment fragmentA;
     MainActivityFragment fragmentB;
     EditText gallonsText;
+    SharedPreferences sharedPrefs;
+    String savedSettingsFileName = "CalGas";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +53,21 @@ public class MainActivity extends Activity {
 
             }
         });
+
+        loadPreviousValues();
+    }
+
+    private void loadPreviousValues() {
+        sharedPrefs = getSharedPreferences(savedSettingsFileName, MODE_PRIVATE);
+        gallonsText.setText(sharedPrefs.getString("gallons", "15"));
+        String aBoardPrice = sharedPrefs.getString("aBoardPrice", "2.19");
+        String aExtraFees = sharedPrefs.getString("aExtraFees", "0.35");
+        String aCashback = sharedPrefs.getString("aCashback", "0");
+        String bBoardPrice = sharedPrefs.getString("bBoardPrice", "2.32");
+        String bExtraFees = sharedPrefs.getString("bExtraFees", "0.00");
+        String bCashback = sharedPrefs.getString("bCashback", "5");
+        fragmentA.setDefaultValues(aBoardPrice, aExtraFees, aCashback);
+        fragmentB.setDefaultValues(bBoardPrice, bExtraFees, bCashback);
     }
 
     private void invokeFragmentsCalculate() {
@@ -89,5 +107,28 @@ public class MainActivity extends Activity {
 
         MainActivityFragment fragment = (fragmentA.getTotalCost() > fragmentB.getTotalCost()) ? fragmentB : fragmentA;
         fragment.setBackgroundColor();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        saveCurrentValues();
+    }
+
+    private void saveCurrentValues() {
+        sharedPrefs = getSharedPreferences(savedSettingsFileName, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPrefs.edit();
+        editor.putString("gallons", gallonsText.getText().toString().trim());
+
+        String [] aValues = fragmentA.getCurrentValues();
+        editor.putString("aBoardPrice", aValues[0]);
+        editor.putString("aExtraFees", aValues[1]);
+        editor.putString("aCashback", aValues[2]);
+
+        String [] bValues = fragmentB.getCurrentValues();
+        editor.putString("bBoardPrice", bValues[0]);
+        editor.putString("bExtraFees", bValues[1]);
+        editor.putString("bCashback", bValues[2]);
+        editor.commit();
     }
 }

@@ -48,15 +48,12 @@ public class MainActivityFragment extends Fragment implements Spinner.OnItemSele
         titleText.setText((fragmentName.equals("A")) ? R.string.station_a : R.string.station_b);
 
         boardPriceText = (EditText) view.findViewById(R.id.board_price_text);
-        boardPriceText.setText(fragmentName.equals("A") ? "2.19" : "2.32");
         boardPriceText.addTextChangedListener(new CustomTextWatcher(boardPriceText));
 
         extraFeesText = (EditText) view.findViewById(R.id.extra_fees_text);
-        extraFeesText.setText(fragmentName.equals("A") ? "0.35" : "0.00");
         extraFeesText.addTextChangedListener(new CustomTextWatcher(extraFeesText));
 
         cashbackSpinner = (Spinner) view.findViewById(R.id.cashback_spinner);
-        cashbackSpinner.setSelection(fragmentName.equals("A") ? 0 : 5);
         cashbackSpinner.setOnItemSelectedListener(this);
 
         totalCostText = (TextView) view.findViewById(R.id.total_cost);
@@ -105,6 +102,22 @@ public class MainActivityFragment extends Fragment implements Spinner.OnItemSele
         parentView.setBackgroundColor(Color.TRANSPARENT);
     }
 
+    public void setDefaultValues(String boardPrice, String extraFees, String cashback) {
+        boardPriceText.setText(boardPrice);
+        extraFeesText.setText(extraFees);
+        cashbackSpinner.setSelection(Integer.parseInt(cashback));
+        calculate();
+    }
+
+    public String[] getCurrentValues() {
+        String rawPrice = boardPriceText.getText().toString().trim();
+        String rawFees = extraFeesText.getText().toString().trim();
+        String cashback = (cashbackSpinner.getSelectedItem().toString().substring(0, 1));
+
+        String [] values = {rawPrice, rawFees, cashback};
+        return values;
+    }
+
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         calculate();
@@ -136,12 +149,6 @@ public class MainActivityFragment extends Fragment implements Spinner.OnItemSele
 
         @Override
         public void afterTextChanged(Editable s) {
-//            if (s.length() == 4) {
-//                // hide virtual keyboard
-//                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-//                imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
-//                editText.clearFocus();
-//            }
             int index = s.toString().indexOf(".");
             if (index != -1) {
                 String afterDecimal = s.toString().substring(index+1);
@@ -149,7 +156,6 @@ public class MainActivityFragment extends Fragment implements Spinner.OnItemSele
                     editText.setText(before);
                 }
             }
-
             calculate();
         }
     }
